@@ -8,9 +8,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import app.enums.Status;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
-public class Package {
+public class Parcel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -19,4 +27,5 @@ public class Package {
     private String receiverName;
     private Status status;
     private LocalDateTime updated;
+
 }
