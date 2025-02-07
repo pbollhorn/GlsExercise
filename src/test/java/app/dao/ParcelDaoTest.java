@@ -6,6 +6,7 @@ import app.enums.Status;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
+import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -86,17 +87,24 @@ class ParcelDaoTest {
     void readAllParcels() {
         List<Parcel> parcels = parcelDao.readAllParcels();
         assertEquals(2, parcels.size());
-        assertEquals(1,parcels.get(0).getId());
-        assertEquals("5678",parcels.get(0).getTrackingNumber());
-        assertEquals("Peter",parcels.get(0).getSenderName());
-        assertEquals("Rolf",parcels.get(0).getReceiverName());
-        assertEquals(Status.IN_TRANSIT,parcels.get(0).getStatus());
+        assertEquals(1, parcels.get(0).getId());
+        assertEquals("5678", parcels.get(0).getTrackingNumber());
+        assertEquals("Peter", parcels.get(0).getSenderName());
+        assertEquals("Rolf", parcels.get(0).getReceiverName());
+        assertEquals(Status.IN_TRANSIT, parcels.get(0).getStatus());
         assertTrue(LocalDateTime.now().isAfter(parcels.get(0).getCreated()));
         assertNull(parcels.get(0).getUpdated());
     }
 
     @Test
     void updateParcelStatus() {
+        LocalDateTime now = LocalDateTime.now();
+
+        parcelDao.updateParcelStatus("5678", Status.DELIVERED);
+        Parcel parcel = parcelDao.readByTrackingNumber("5678");
+        assertEquals(Status.DELIVERED, parcel.getStatus());
+        assertNotNull(parcel.getUpdated());
+        assertTrue(now.isBefore(parcel.getUpdated()));
     }
 
     @Test
