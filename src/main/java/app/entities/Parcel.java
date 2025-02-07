@@ -2,10 +2,7 @@ package app.entities;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import app.enums.Status;
 import lombok.*;
@@ -23,7 +20,21 @@ public class Parcel {
     private String trackingNumber;
     private String senderName;
     private String receiverName;
+    @Setter
+    @Enumerated(EnumType.STRING)
     private Status status;
+    @Column(updatable = false)
+    private LocalDateTime created;
     private LocalDateTime updated;
+
+    @PrePersist
+    protected void onCreate(){
+        created = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate(){
+        updated = LocalDateTime.now();
+    }
 
 }

@@ -33,7 +33,7 @@ public class Main {
         parcelDao.updateParcelStatus("1234", Status.IN_TRANSIT);
         System.out.println(parcelDao.readByTrackingNumber("1234"));
 
-        parcelDao.deleteParcel("1234");
+//        parcelDao.deleteParcel("1234");
 
     }
 }

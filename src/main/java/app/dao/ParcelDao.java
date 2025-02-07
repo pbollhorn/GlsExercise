@@ -52,14 +52,24 @@ public class ParcelDao {
         }
     }
 
+//    public void updateParcelStatus(String trackingNumber, Status status) {
+//        try (EntityManager em = emf.createEntityManager()) {
+//            String jpql = "UPDATE Parcel p SET p.status = :status WHERE p.trackingNumber = :trackingNumber";
+//            em.getTransaction().begin();
+//            em.createQuery(jpql)
+//                    .setParameter("status", status)
+//                    .setParameter("trackingNumber", trackingNumber)
+//                    .executeUpdate();
+//            em.getTransaction().commit();
+//        }
+//    }
+
     public void updateParcelStatus(String trackingNumber, Status status) {
         try (EntityManager em = emf.createEntityManager()) {
-            String jpql = "UPDATE Parcel p SET p.status = :status WHERE p.trackingNumber = :trackingNumber";
+            Parcel parcel = readByTrackingNumber(trackingNumber);
+            parcel.setStatus(status);
             em.getTransaction().begin();
-            em.createQuery(jpql)
-                    .setParameter("status", status)
-                    .setParameter("trackingNumber", trackingNumber)
-                    .executeUpdate();
+            em.merge(parcel);
             em.getTransaction().commit();
         }
     }
