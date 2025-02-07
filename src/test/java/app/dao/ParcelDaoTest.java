@@ -11,6 +11,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,12 +27,12 @@ class ParcelDaoTest {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.createQuery("DELETE FROM Parcel").executeUpdate();
-            em.createNativeQuery("ALTER SEQUENCE parcel_id_seq RESTART WITH 1");
+            em.createNativeQuery("ALTER SEQUENCE parcel_id_seq RESTART WITH 1").executeUpdate();
             em.getTransaction().commit();
             Parcel[] students = app.populators.ParcelPopulator.populate(parcelDao);
             p1 = students[0];
             p2 = students[1];
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -59,12 +60,12 @@ class ParcelDaoTest {
                 .build();
 
         parcelDao.createParcel(parcel);
-        assertEquals(3,parcel.getId());
+        assertEquals(3, parcel.getId());
 
-        assertThrows(IllegalArgumentException.class,() -> parcelDao.createParcel(null));
+        assertThrows(IllegalArgumentException.class, () -> parcelDao.createParcel(null));
 
         List<Parcel> parcels = parcelDao.readAllParcels();
-        assertEquals(3,parcels.size());
+        assertEquals(3, parcels.size());
     }
 
     @Test
@@ -74,15 +75,24 @@ class ParcelDaoTest {
 
         assertEquals("Rolf", parcel.getReceiverName());
         assertEquals("Peter", parcel.getSenderName());
-        assertEquals(1,parcel.getId());
+        assertEquals(1, parcel.getId());
 
-        assertNotEquals(2,parcel.getId());
+        assertNotEquals(2, parcel.getId());
 
-        assertThrows(NoResultException.class,() -> parcelDao.readByTrackingNumber("findesIkke"));
+        assertThrows(NoResultException.class, () -> parcelDao.readByTrackingNumber("findesIkke"));
     }
 
     @Test
     void readAllParcels() {
+        List<Parcel> parcels = parcelDao.readAllParcels();
+        assertEquals(2, parcels.size());
+        assertEquals(1,parcels.get(0).getId());
+        assertEquals("5678",parcels.get(0).getTrackingNumber());
+        assertEquals("Peter",parcels.get(0).getSenderName());
+        assertEquals("Rolf",parcels.get(0).getReceiverName());
+        assertEquals(Status.IN_TRANSIT,parcels.get(0).getStatus());
+        assertTrue(LocalDateTime.now().isAfter(parcels.get(0).getCreated()));
+        assertNull(parcels.get(0).getUpdated());
     }
 
     @Test
