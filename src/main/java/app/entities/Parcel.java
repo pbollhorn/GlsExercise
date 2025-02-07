@@ -8,14 +8,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import app.enums.Status;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Builder
 @Entity
 public class Parcel {

@@ -19,6 +19,6 @@ public class Main {
 
         parcelDao.createParcel(parcel);
 
-        System.out.println("Hello world!");
+        System.out.println(parcelDao.readByTrackingNumber("1234"));
     }
 }
