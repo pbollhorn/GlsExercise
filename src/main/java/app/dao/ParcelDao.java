@@ -3,6 +3,7 @@ package app.dao;
 import java.util.List;
 
 import app.enums.Status;
+import app.exceptions.DaoExeception;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
@@ -74,7 +75,7 @@ public class ParcelDao {
         }
     }
 
-    public void deleteParcel(String trackingNumber) {
+    public void deleteParcel(String trackingNumber) throws DaoExeception {
         try (EntityManager em = emf.createEntityManager()) {
             String jpql = "DELETE FROM Parcel p WHERE p.trackingNumber = :trackingNumber";
             em.getTransaction().begin();

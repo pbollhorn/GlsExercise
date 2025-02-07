@@ -3,6 +3,7 @@ package app.dao;
 import app.config.HibernateConfig;
 import app.entities.Parcel;
 import app.enums.Status;
+import app.exceptions.DaoExeception;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
@@ -109,5 +110,11 @@ class ParcelDaoTest {
 
     @Test
     void deleteParcel() {
+        parcelDao.deleteParcel("5678");
+        assertThrows(DaoExeception.class, () -> parcelDao.deleteParcel("findesIkke"));
+        assertThrows(NoResultException.class, () -> parcelDao.readByTrackingNumber("5678"));
+
+        List<Parcel> parcels = parcelDao.readAllParcels();
+        assertEquals(1,parcels.size());
     }
 }
