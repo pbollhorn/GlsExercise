@@ -63,4 +63,15 @@ public class ParcelDao {
             em.getTransaction().commit();
         }
     }
+
+    public void deleteParcel(String trackingNumber) {
+        try (EntityManager em = emf.createEntityManager()) {
+            String jpql = "DELETE FROM Parcel p WHERE p.trackingNumber = :trackingNumber";
+            em.getTransaction().begin();
+            em.createQuery(jpql)
+                    .setParameter("trackingNumber", trackingNumber)
+                    .executeUpdate();
+            em.getTransaction().commit();
+        }
+    }
 }
