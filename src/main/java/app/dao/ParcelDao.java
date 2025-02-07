@@ -2,6 +2,7 @@ package app.dao;
 
 import java.util.List;
 
+import app.enums.Status;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
@@ -43,11 +44,23 @@ public class ParcelDao {
         }
     }
 
-        public List<Parcel> readAllParcels() {
-            try (EntityManager em = emf.createEntityManager()) {
-                String jpql = "SELECT p FROM Parcel p";
-                TypedQuery<Parcel> query = em.createQuery(jpql, Parcel.class);
-                return query.getResultList();
-            }
+    public List<Parcel> readAllParcels() {
+        try (EntityManager em = emf.createEntityManager()) {
+            String jpql = "SELECT p FROM Parcel p";
+            TypedQuery<Parcel> query = em.createQuery(jpql, Parcel.class);
+            return query.getResultList();
         }
+    }
+
+    public void updateParcelStatus(String trackingNumber, Status status) {
+        try (EntityManager em = emf.createEntityManager()) {
+            String jpql = "UPDATE Parcel p SET p.status = :status WHERE p.trackingNumber = :trackingNumber";
+            em.getTransaction().begin();
+            em.createQuery(jpql)
+                    .setParameter("status", status)
+                    .setParameter("trackingNumber", trackingNumber)
+                    .executeUpdate();
+            em.getTransaction().commit();
+        }
+    }
 }

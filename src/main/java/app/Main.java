@@ -3,6 +3,7 @@ package app;
 import app.config.HibernateConfig;
 import app.dao.ParcelDao;
 import app.entities.Parcel;
+import app.enums.Status;
 import jakarta.persistence.EntityManagerFactory;
 
 public class Main {
@@ -25,8 +26,12 @@ public class Main {
         parcelDao.createParcel(parcel);
         parcelDao.createParcel(parcel1);
 
+//        System.out.println(parcelDao.readByTrackingNumber("1234"));
+
+//        parcelDao.readAllParcels().forEach(System.out::println);
+
+        parcelDao.updateParcelStatus("1234", Status.IN_TRANSIT);
         System.out.println(parcelDao.readByTrackingNumber("1234"));
 
-        parcelDao.readAllParcels().forEach(System.out::println);
     }
 }
