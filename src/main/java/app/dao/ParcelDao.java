@@ -1,9 +1,12 @@
 package app.dao;
 
+import java.util.List;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import app.entities.Parcel;
 import jakarta.persistence.TypedQuery;
+
+import app.entities.Parcel;
 
 
 public class ParcelDao {
@@ -31,7 +34,6 @@ public class ParcelDao {
         }
     }
 
-
     public Parcel readByTrackingNumber(String trackingNumber) {
         try (EntityManager em = emf.createEntityManager()) {
             String jpql = "SELECT p FROM Parcel p WHERE p.trackingNumber=:trackingNumber";
@@ -39,9 +41,13 @@ public class ParcelDao {
             query.setParameter("trackingNumber", trackingNumber);
             return query.getSingleResult();
         }
-
-
     }
 
-
+        public List<Parcel> readAllParcels() {
+            try (EntityManager em = emf.createEntityManager()) {
+                String jpql = "SELECT p FROM Parcel p";
+                TypedQuery<Parcel> query = em.createQuery(jpql, Parcel.class);
+                return query.getResultList();
+            }
+        }
 }

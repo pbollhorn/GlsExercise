@@ -15,10 +15,18 @@ public class Main {
 
         Parcel parcel = Parcel.builder()
                 .trackingNumber("1234")
-                        .build();
+                .build();
+        Parcel parcel1 = Parcel.builder()
+                .trackingNumber("5678")
+                .receiverName("Rolf")
+                .senderName("Peter")
+                .build();
 
         parcelDao.createParcel(parcel);
+        parcelDao.createParcel(parcel1);
 
         System.out.println(parcelDao.readByTrackingNumber("1234"));
+
+        parcelDao.readAllParcels().forEach(System.out::println);
     }
 }
